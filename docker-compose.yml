@@ -1,0 +1,87 @@
+version: "3.9"
+
+
+networks:
+
+  network:
+
+#https://blog.code4hire.com/2018/06/define-named-volume-with-host-mount-in-the-docker-compose-file/
+volumes:
+
+  DB:
+
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/rcorenti/data/DB
+      o: bind
+
+
+  WordPress:
+
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/rcorenti/data/WordPress
+      o: bind
+
+
+services:
+
+  mariadb:
+
+    image: "mariadb:inception"
+    ports:
+      - "3306:3306"
+    env_file:
+      - .env
+    build:
+      context: ./srcs/mariadb
+      args:
+        - SQL_DB=$SQL_DB
+        - SQL_ROOT=$SQL_ROOT
+        - SQL_PWD=$SQL_PWD
+        - SQL_USR=$SQL_USR
+        - SQL_USR_PWD=$SQL_USR_PWD
+    volumes:
+      - DB:/var/lib/mysql
+    networks:
+      - network
+    restart: always
+
+
+  wordpress:
+
+    depends_on:
+      - mariadb
+    image: "wordpress:inception"
+    ports:
+      - "9000:9000"
+    env_file:
+     - .env
+    build:
+      context: ./srcs/wordpress
+      args:
+        - SQL_DB=$SQL_DB
+        - SQL_ROOT=$SQL_ROOT
+        - SQL_PWD=$SQL_PWD
+    volumes:
+      - WordPress:/var/www/html
+    networks:
+      - network
+    restart: always
+
+
+  nginx:
+
+    depends_on:
+      - wordpress
+    image: "nginx:inception"
+    ports:
+      - "443:443"
+    build: ./srcs/nginx
+    volumes:
+      - WordPress:/var/www/html
+    networks:
+      - network
+    restart: always
