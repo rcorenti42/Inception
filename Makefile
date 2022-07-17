@@ -5,12 +5,23 @@ all:
 
 clean:
 	@docker system prune -af
-	@-docker rmi $(docker images -aq)
+
+stop:
+	@docker-compose -p inception stop
+
 fclean: clean
-	@-docker stop $(docker ps -aq)
-	@-docker rm -v $(docker ps -aq)
-	@rm -rf /home/rcorenti/data/DB /home/rcorenti/data/WordPress
+	@docker rmi -f wordpress
+	@docker rmi -f nginx
+	@docker rmi -f mariadb
+	@docker rm -f wordpress:inception
+	@docker rm -f nginx:inception
+	@docker rm -f mariadb:inception
+	@rm -rf /home/rcorenti/data/DB
+	@rm -rf /home/rcorenti/data/WordPress
+	@-docker network rm inception_network
+	@-docker volume rm -f inception_DB
+	@-docker volume rm -f inception_WordPress
 
 re: fclean all
 
-.PHONY: all, clean, fclean, re
+.PHONY: all, clean, fclean, re, stop
