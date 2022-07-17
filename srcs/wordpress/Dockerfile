@@ -1,9 +1,5 @@
 FROM debian:buster
 
-ARG SQL_DB
-ARG SQL_ROOT
-ARG SQL_PWD
-
 WORKDIR /var/www/html
 
 EXPOSE 9000

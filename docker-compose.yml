@@ -59,12 +59,7 @@ services:
       - "9000:9000"
     env_file:
      - .env
-    build:
-      context: ./srcs/wordpress
-      args:
-        - SQL_DB=$SQL_DB
-        - SQL_ROOT=$SQL_ROOT
-        - SQL_PWD=$SQL_PWD
+    build: ./srcs/wordpress
     volumes:
       - WordPress:/var/www/html
     networks:
