@@ -1,13 +1,13 @@
 all:
 	@sed -i "s/localhost/rcorenti.42.fr/g" /etc/hosts
 	@mkdir -p /home/rcorenti/data/DB /home/rcorenti/data/WordPress
-	docker-compose up --build
+	@docker-compose -f srcs/docker-compose.yml -p inception up --build
 
 clean:
 	@docker system prune -af
 
 stop:
-	@docker-compose -p inception stop
+	@docker-compose -f srcs/docker-compose.yml -p inception stop
 
 fclean: clean
 	@docker rmi -f wordpress

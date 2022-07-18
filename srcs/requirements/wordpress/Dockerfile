@@ -2,8 +2,6 @@ FROM debian:buster
 
 WORKDIR /var/www/html
 
-EXPOSE 9000
-
 COPY ./conf/wp-config.php /tmp/
 COPY ./tools/script.sh  /tmp/
 

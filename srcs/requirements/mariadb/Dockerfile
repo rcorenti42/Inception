@@ -6,8 +6,6 @@ ARG SQL_PWD
 ARG SQL_USR
 ARG SQL_USR_PWD
 
-EXPOSE 3306
-
 RUN apt-get update && apt-get install -y \
     mariadb-server && \
     rm -rf /var/lib/apt/lists/*

@@ -31,12 +31,10 @@ services:
   mariadb:
 
     image: "mariadb:inception"
-    ports:
-      - "3306:3306"
     env_file:
       - .env
     build:
-      context: ./srcs/mariadb
+      context: ./requirements/mariadb
       args:
         - SQL_DB=$SQL_DB
         - SQL_ROOT=$SQL_ROOT
@@ -55,11 +53,9 @@ services:
     depends_on:
       - mariadb
     image: "wordpress:inception"
-    ports:
-      - "9000:9000"
     env_file:
      - .env
-    build: ./srcs/wordpress
+    build: ./requirements/wordpress
     volumes:
       - WordPress:/var/www/html
     networks:
@@ -74,7 +70,7 @@ services:
     image: "nginx:inception"
     ports:
       - "443:443"
-    build: ./srcs/nginx
+    build: ./requirements/nginx
     volumes:
       - WordPress:/var/www/html
     networks:
